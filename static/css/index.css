@@ -301,13 +301,14 @@ header .carrinho {
   }
   .busca-container input[type="text"] {
     font-size: 14px;
-    padding: 8px 38px 8px 10px;
+    padding: 8px 44px 8px 10px; /* Aumentei o padding direito para 44px */
   }
   .busca-container button.lupa-btn {
     font-size: 16px;
-    right: 8px;
+    right: 8%; /* Ajustei para 12px para alinhar melhor */
   }
 }
+
 
 
 

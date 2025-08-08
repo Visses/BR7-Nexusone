@@ -1,0 +1,258 @@
+
+<!-- admin.html -->
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração</title>
+    <link rel="stylesheet" href="/static/css/admin.css">
+</head>
+<body>
+    <header>
+        <h1>Painel Administrativo</h1>
+    </header>
+
+     <main class="admin-panel">
+      <form id="product-form" method="POST" action="/salvar-produto" enctype="multipart/form-data">
+        <label for="tipo">Tipo de Produto</label>
+        <select id="tipo" name="tipo" onchange="updateFormFields()" required>
+          <option value="">Selecione</option>
+          <option value="chuteira">Chuteira</option>
+          <option value="tenis">Tênis</option>
+          <option value="bolsa">Bolsa</option>
+        </select>
+
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" name="nome" required />
+
+        <div id="campos-extra"></div>
+
+        <label for="descricao">Descrição</label>
+        <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição do produto"></textarea>
+
+        <label for="preco">Preço</label>
+        <input type="text" id="preco" name="preco" required />
+
+        <label for="imagens">Imagens do Produto</label>
+        <input type="file" id="imagens" name="imagens" multiple accept="image/*" required />
+
+        <button type="submit">Salvar Produto</button>
+
+        <div id="campos-adicionais">
+
+<div id="modalidade-container" style="display:none;">
+  <label for="modalidade">Modalidade (para chuteiras)</label>
+  <select id="modalidade" name="categoria">
+    <option value="">Nenhuma</option>
+    <option value="campo">Campo</option>
+    <option value="society">Society</option>
+    <option value="futsal">Futsal</option>
+  </select>
+</div>
+
+<div id="subcategoria-campo" style="display:none;">
+  <label for="subcategoria">Subcategoria (somente para Campo)</label>
+  <select id="subcategoria" name="subcategoria">
+    <option value="">Nenhuma</option>
+    <option value="trava">Trava</option>
+    <option value="trava-mista">Trava Mista</option>
+  </select>
+</div>
+
+
+
+
+
+  <label>
+    <input type="checkbox" id="pronta_entrega" name="pronta_entrega" />
+    Pronta Entrega
+  </label>
+
+  <label>
+    <input type="checkbox" id="mais_vendidos" name="mais_vendidos" />
+    Mais Vendidos
+  </label>
+
+  <label>
+  <input type="checkbox" id="por_encomenda" name="por_encomenda">
+  Por Encomenda
+</label>
+
+</div>
+
+      </form>
+      <section style="margin-top: 2rem;">
+        <h2>Buscar Produtos</h2>
+        <form method="GET" action="/admin" id="form-busca-produtos">
+          <input type="text" name="busca_nome" placeholder="Buscar por nome" style="padding: 0.5rem; width: 60%;" />
+      
+          <label style="margin-left: 1rem;">
+            <input type="checkbox" id="toggle-personalizada"> Busca Personalizada
+          </label>
+      
+          <div id="filtros-personalizados" style="margin-top: 1rem; display: none;">
+            <label><input type="checkbox" name="pronta_entrega"> Pronta Entrega</label>
+            <label><input type="checkbox" name="por_encomenda"> Por Encomenda</label>
+            <label><input type="checkbox" name="mais_vendidos"> Mais Vendidos</label><br><br>
+      
+            <label for="tipo">Tipo:</label>
+            <select name="tipo">
+              <option value="">Todos</option>
+              <option value="chuteira">Chuteira</option>
+              <option value="tenis">Tênis</option>
+              <option value="bolsa">Bolsa</option>
+            </select>
+      
+            <label for="categoria">Categoria:</label>
+            <select name="categoria">
+              <option value="">Todas</option>
+              <option value="campo">Campo</option>
+              <option value="society">Society</option>
+              <option value="futsal">Futsal</option>
+            </select>
+      
+            <label for="subcategoria">Subcategoria:</label>
+            <select name="subcategoria">
+              <option value="">Todas</option>
+              <option value="trava">Trava</option>
+              <option value="trava-mista">Trava Mista</option>
+            </select>
+          </div>
+      
+          <br><br>
+          <button type="submit" style="padding: 0.5rem 1rem; background-color: #28a745; color: white; border: none; border-radius: 5px;">Buscar</button>
+        </form>
+      </section>
+      
+      <section id="admin-lista-produtos">
+        <h2>Produtos Cadastrados</h2>
+        <table border="1" cellpadding="8" cellspacing="0" width="100%">
+          <thead>
+            <tr>
+              
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Aqui vamos preencher dinamicamente via backend -->
+            {% for produto in produtos %}
+            <tr>
+          
+
+              <td data-label="Imagem">
+  {% if produto.imagens %}
+  <img src="{{ url_for('static', filename='uploads/' ~ produto.imagens[0].caminho) }}" 
+       alt="Imagem de {{ produto.nome }}" style="width: 80px; height: auto;" />
+{% else %}
+  <p>Sem imagens cadastradas.</p>
+{% endif %}
+
+</td>
+
+
+              <td data-label="Tipo">{{ produto.tipo }}</td>
+<td data-label="Nome">{{ produto.nome }}</td>
+
+<td data-label="Preço">R$ {{ produto.preco }}</td>
+<td data-label="Ações">
+              <td>
+                <a href="{{ url_for('editar_produto', produto_id=produto.id) }}" target="_blank">Editar</a>
+|
+              <form style="display:inline;" method="POST" action="/excluir-produto/{{ produto.id }}" onsubmit="return confirm('Deseja realmente excluir este produto?');">
+    <button type="submit">Excluir</button>
+                </form>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="5">Nenhum produto cadastrado.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </section>
+    </main>
+
+<script>
+function updateFormFields() {
+  const tipo = document.getElementById("tipo").value;
+  const campos = document.getElementById("campos-extra");
+
+  campos.innerHTML = "";
+
+  const modalidadeContainer = document.getElementById("modalidade-container");
+  const subcategoriaCampo = document.getElementById("subcategoria-campo");
+
+  if (tipo === "chuteira") {
+    modalidadeContainer.style.display = 'block';
+  } else {
+    modalidadeContainer.style.display = 'none';
+    subcategoriaCampo.style.display = 'none';
+    document.getElementById('modalidade').value = '';
+    document.getElementById('subcategoria').value = '';
+  }
+
+if (tipo === "chuteira" || tipo === "tenis") {
+  campos.innerHTML += `
+    <label for="marca">Marca</label>
+    <input type="text" id="marca" name="marca" required>
+
+    <label>Tamanhos Disponíveis:</label><br/>
+    ${[33,34,35,36,37,38,39,40,41,42,43,44].map(t => `
+      <label><input type="checkbox" name="tamanho" value="${t}"> ${t}</label>
+    `).join(' ')}
+
+    <br/><label>Cores Disponíveis:</label><br/>
+    ${['Preto', 'Branco', 'Azul', 'Vermelho', 'Rosa', 'Verde', 'Original'].map(cor => `
+      <label><input type="checkbox" name="cor" value="${cor}"> ${cor}</label>
+    `).join(' ')}
+
+    <br/><label for="cor-personalizada">Outras cores (separadas por vírgula)</label>
+    <input type="text" id="cor-personalizada" name="cor">
+  `;
+}
+
+
+  if (tipo === "bolsa") {
+    campos.innerHTML += `
+      <label>Cores Disponíveis:</label><br/>
+      ${['Preto', 'Branco', 'Rosa', 'Azul'].map(cor => `
+        <label><input type="checkbox" name="cor" value="${cor}"> ${cor}</label>
+      `).join(' ')}
+    `;
+  }
+  
+  verificarSubcategoria();
+}
+
+function verificarSubcategoria() {
+  const tipo = document.getElementById('tipo').value;
+  const modalidade = document.getElementById('modalidade').value;
+  const subcategoriaCampo = document.getElementById('subcategoria-campo');
+
+  if (tipo === 'chuteira' && modalidade === 'campo') {
+    subcategoriaCampo.style.display = 'block';
+  } else {
+    subcategoriaCampo.style.display = 'none';
+    document.getElementById('subcategoria').value = '';
+  }
+}
+
+document.getElementById('tipo').addEventListener('change', updateFormFields);
+document.getElementById('modalidade').addEventListener('change', verificarSubcategoria);
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateFormFields();
+});
+</script>
+
+<script>
+  document.getElementById("toggle-personalizada").addEventListener("change", function () {
+    const filtros = document.getElementById("filtros-personalizados");
+    filtros.style.display = this.checked ? "block" : "none";
+  });
+</script>
+
+
+</body>
+</html>

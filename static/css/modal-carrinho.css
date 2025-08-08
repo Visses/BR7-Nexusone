@@ -1,0 +1,102 @@
+#modal-carrinho {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-conteudo {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+.modal-conteudo {
+  position: relative; /* necessário para posicionar o botão */
+}
+
+
+#lista-carrinho {
+  list-style: none;
+  padding-left: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+#total-carrinho {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.btn-whatsapp {
+  background: #25D366;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+  
+.item-carrinho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.item-carrinho img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+
+
+.carrinho-container {
+  position: relative;
+  font-size: 24px;
+}
+
+.carrinho-icon {
+  position: relative;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.badge-carrinho {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: bold;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  line-height: 16px;
+  text-align: center;
+  display: none;
+  z-index: 10;
+}

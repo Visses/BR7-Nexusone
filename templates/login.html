@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login Administrativo</h2>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for message in messages %}
+            <li>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post">
+      <label>Usuário:</label>
+      <input type="text" name="usuario">
+
+      <label>Senha:</label>
+      <input type="password" name="senha">
+
+      <input type="submit" value="Entrar">
+    </form>
+  </div>
+</body>
+</html>

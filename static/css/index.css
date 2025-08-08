@@ -1,0 +1,1101 @@
+/* Reset e variáveis principais */
+:root {
+  --azul-br7: #00aefe;
+  --preto: #000;
+  --cinza-claro: #f2f2f2;
+  --prata-escuro: #d1d1d1;
+  --branco: #fff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--cinza-claro);
+  color: var(--preto);
+  margin: 0;
+}
+
+
+/* TELA DE CARREGAMENTO */
+#loader {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.logo-br7 {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+.frase {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #00aefe;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 6px;
+  background-color: #444;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.progress {
+  width: 0%;
+  height: 100%;
+  background-color: #00aefe;
+  animation: loadProgress 2.5s ease-out forwards;
+}
+
+@keyframes loadProgress {
+  to {
+    width: 100%;
+  }
+}
+
+/* Rodapé */
+.loader-footer {
+  position: absolute;
+  bottom: 40px;
+  text-align: center;
+}
+
+.loader-footer p {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #ccc;
+}
+
+.logo-nexus {
+  width: 160px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+}
+
+/* Esconde loader após o carregamento */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+
+
+
+header {
+  background-color: var(--preto);
+  color: var(--branco);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100; /* aumentei para garantir que fique acima de tudo */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); /* sombra suave */
+}
+
+ html {
+    scroll-behavior: smooth;
+  }
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+}
+
+.navbar.mostrar {
+  transform: translateY(0);
+}
+
+.navbar.esconder {
+  transform: translateY(-100%);
+}
+
+.espaco-navbar {
+  height: 80px; /* ou a altura exata da sua navbar */
+}
+
+.logo{
+  max-height: 50px;
+  height: auto;
+  width: auto;
+}
+
+
+.menu-btn {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--branco);
+}
+
+header .carrinho {
+  position: relative;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.badge-carrinho {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.7rem;
+}
+
+/* Menu lateral */
+.menu-lateral {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: var(--preto);
+  display: flex;
+  flex-direction: column;
+  padding-top: 3rem;
+  transition: left 0.3s ease;
+  z-index: 1000;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+}
+
+/* Links principais e de marcas */
+.menu-lateral a {
+  color: var(--branco);
+  padding: 1rem 1.5rem;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 16px;
+  transition: background 0.2s;
+  display: block;
+}
+
+.menu-lateral a:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Submenus ocultos inicialmente */
+.menu-lateral .submenu {
+  display: none;
+  flex-direction: column;
+  margin-top: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Links dentro de submenus (como as marcas) */
+.menu-lateral .submenu a {
+  color: #ccc;
+  font-size: 15px;
+  padding-left: 2rem; /* indentação para diferenciar */
+  border-radius: 4px;
+  border-bottom: none; /* remove borda inferior no último nível */
+}
+
+.menu-lateral .submenu a:hover {
+  background-color: rgba(0, 174, 254, 0.15);
+  color: #00aefe;
+}
+
+/* Botão para abrir submenu */
+.menu-lateral button.toggle-submenu {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 0.8rem 1.5rem;
+  text-align: left;
+  font-size: 16px;
+  width: 100%;
+  transition: background 0.2s;
+}
+
+/* Botão com hover */
+.menu-lateral button.toggle-submenu:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Quando submenu está ativo */
+.submenu.ativo {
+  display: flex;
+}
+
+/* Estilo item ativo */
+.menu-lateral a.menu-ativo,
+.menu-lateral .submenu a.menu-ativo {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #00aefe;
+}
+
+.busca-container {
+  position: relative;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.busca-container input[type="text"] {
+  width: 100%;
+  padding: 10px 40px 10px 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.busca-container input[type="text"]:focus {
+  border-color: #00aefe;
+  box-shadow: 0 0 5px #00aefe;
+}
+
+.busca-container button.lupa-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: #00aefe;
+  padding: 0;
+  line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .busca-container {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+  .busca-container input[type="text"] {
+    font-size: 14px;
+    padding: 8px 38px 8px 10px;
+  }
+  .busca-container button.lupa-btn {
+    font-size: 16px;
+    right: 8px;
+  }
+}
+
+
+
+.carrossel {
+  overflow: hidden;
+  max-width: 100%;
+  position: relative;
+}
+
+.carrossel-inner {
+  display: flex;
+  width: 300%;
+  animation: slide 12s ease-in-out infinite;
+}
+
+.carrossel-inner img {
+  width: 100vw;
+  height: auto;
+  flex-shrink: 0;
+  display: block;
+  object-fit: cover;
+}
+
+/* Animação que para em cada banner */
+@keyframes slide {
+  0%   { transform: translateX(0); }
+  33%  { transform: translateX(0); }
+
+  36%  { transform: translateX(-100vw); }
+  66%  { transform: translateX(-100vw); }
+
+  69%  { transform: translateX(-200vw); }
+  100% { transform: translateX(-200vw); }
+}
+
+
+.faixa-animada {
+  background-color: #e0e0e0;  /* cinza claro moderno */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  font-weight: 600;
+  font-size: 14px;
+  color: #000000;  /* texto preto */
+  padding: 0 10px;
+}
+
+.faixa-animada marquee {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 40px; /* espaçamento entre itens */
+}
+
+.faixa-animada span {
+  display: inline-flex;
+  align-items: center;  /* alinha texto e imagem verticalmente */
+  gap: 8px;
+}
+
+
+.faixa-animada img {
+  height: 20px;
+  width: auto;
+  vertical-align: middle; /* garante alinhamento vertical */
+  display: inline-block;  /* ajuda a alinhar melhor */
+}
+
+
+.ver-mais-container {
+  text-align: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.ver-mais-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: black;
+  color: white;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.ver-mais-btn:hover {
+  background-color: #333;
+}
+
+
+.preco-original {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  color: #888;
+}
+
+.preco-original-valor {
+  text-decoration: line-through;
+}
+
+.desconto-badge {
+  background: #e74c3c;
+  color: white;
+  font-weight: bold;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-decoration: none !important;
+}
+
+
+/* Sessão produtos */
+
+.cat {
+  text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+/* Container geral */
+.menu-scroll-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+}
+
+/* Botão toggle */
+.menu-toggle {
+  background-color: #0000005d;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  animation: pulse 1.5s infinite;
+}
+
+.menu-toggle .seta {
+  display: inline-block;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+
+.menu-toggle.ativo .seta {
+  transform: translateX(5px);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0,0,0,0.4); }
+  70% { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Container dos botões principais */
+.menu-scroll-flutuante {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.menu-scroll-flutuante button:last-child {
+  margin-bottom: 10px;
+}
+
+/* Botões */
+.menu-scroll-flutuante button {
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: none;
+}
+
+/* Abertura */
+.menu-scroll-flutuante.ativo {
+  pointer-events: all;
+}
+.menu-scroll-flutuante.ativo button {
+  animation: fadeSlideIn 0.3s forwards;
+}
+
+@keyframes fadeSlideIn {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeSlideOut {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(10px); }
+}
+
+/* Cores */
+.menu-scroll-flutuante button:nth-child(1) { background-color: #000000; } /* Catálogo */
+.menu-scroll-flutuante button:nth-child(2) { background-color:  #000000;  } /* Categorias */
+.menu-scroll-flutuante button:nth-child(3) { background-color:  #000000;  } /* Mais Vendidos */
+.menu-scroll-flutuante button:nth-child(4) { background-color:  #000000;  } /* Por Encomenda */
+.menu-scroll-flutuante button:nth-child(5) { background-color:  #000000;  } /* Pronta Entrega */
+
+.menu-scroll-flutuante button:hover {
+  transform: scale(1.05);
+}
+
+
+/* Submenus */
+.submenu-flutuante {
+  position: fixed;
+  bottom: 80px;
+  right: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 1001;
+  opacity: 0;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.submenu-flutuante.ativo {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: all;
+}
+
+.submenu-flutuante button {
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: filter 0.2s ease;
+}
+
+#submenu-pronta button { background-color: #28a745; }
+#submenu-encomenda button { background-color: #007bff; }
+#submenu-vendidos button { background-color: #b30000; }
+#submenu-categorias button { background-color: #fd7e14; }
+
+.submenu-flutuante button:hover {
+  filter: brightness(1.2);
+}
+
+
+
+
+.titulo-catalogo {
+  text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+
+
+
+.card img {
+  width: 100%;
+  height: 200px; /* Altura fixa */
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+
+
+.card-body {
+  padding: 1rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.no-pix {
+  display: block; /* ou flex, mas block resolve bem aqui */
+  padding: 4px 10px;
+  font-weight: bold;
+  font-size: 0.85rem;
+  color: #28a745;
+  background-color: #f4f4f4;
+  border-radius: 999px;
+  margin: 0px auto; /* centraliza horizontalmente */
+  animation: piscarPix 3.0s infinite;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 0.75rem;
+}
+
+
+
+
+
+
+
+.card-title {
+  font-weight: bold;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+
+}
+
+.preco {
+  color: var(--preto); /* Valor principal agora preto */
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-bottom: 0.25rem;
+}
+
+.parcelas {
+  font-size: 0.85rem;
+  color: var(--azul-br7); /* Info de parcela agora azul */
+  margin-bottom: 0.75rem;
+
+}
+
+
+.btns {
+  margin-top: auto;
+}
+
+.btn {
+  background-color: var(--preto);
+  color: var(--branco);
+  padding: 0.6rem 0;
+  border: none;
+  border-radius: 0 0 10px 10px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+
+.btn:hover {
+  background-color: #0090da;
+}
+
+
+
+.mais-vendidos h1 {
+     text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+.mais-vendidos h2 {
+     text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+.card.mais-vendido {
+  position: relative; /* Garante que a faixa seja posicionada em relação a este card */
+}
+
+.faixa-mais-vendido {
+    background-color: #b30000; /* vermelho mais escuro */
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 4px 0;
+    font-size: 0.8rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    z-index: 1;
+    animation: blink 2.0s infinite ease-in-out;
+}
+
+@keyframes blink {
+  0%, 100% {
+    color: white;
+  }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+
+
+
+/* Faixa base */
+.faixa {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  padding: 4px 0;
+  font-size: 0.8rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  z-index: 1;
+}
+
+/* Faixa Pronta Entrega (verde) */
+.faixa-pronta-entrega {
+  background-color: #007b00;
+  animation: blinkPronta 2.0s infinite ease-in-out;
+}
+
+/* Faixa Por Encomenda (azul escuro) */
+.faixa-por-encomenda {
+  background-color: #00558a;
+  animation: blinkEncomenda 2.0s infinite ease-in-out;
+}
+
+/* Cores por categoria */
+.faixa-society {
+  background-color: #f39f04; /* Verde escuro */
+  animation: blinkSociety 2s infinite ease-in-out;
+}
+.faixa-campo {
+  background-color: #f39f04; /* Azul */
+  animation: blinkCampo 2s infinite ease-in-out;
+}
+.faixa-trava {
+  background-color:  #f39f04; /* Roxo */
+  animation: blinkTrava 2s infinite ease-in-out;
+}
+.faixa-trava-mista {
+  background-color:  #f39f04; /* Rosa */
+  animation: blinkTravaMista 2s infinite ease-in-out;
+}
+.faixa-futsal {
+  background-color:  #f39f04;/* Cinza escuro */
+  animation: blinkFutsal 2s infinite ease-in-out;
+}
+
+/* Animações */
+@keyframes blinkSociety {
+  0%, 100% { color: white; }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+@keyframes blinkFutsal {
+  0%, 100% { color: white; }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+@keyframes blinkCampo {
+  0%, 100% { color: white; }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+@keyframes blinkTrava {
+  0%, 100% { color: white; }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+@keyframes blinkTravaMista {
+  0%, 100% { color: white; }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+
+/* Animações */
+@keyframes blinkPronta {
+  0%, 100% { color: white; }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+
+@keyframes blinkEncomenda {
+  0%, 100% { color: white; }
+  50% {
+    color: rgb(77, 77, 77);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+.por-encomenda h1 {
+     text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+.por-encomenda h2 {
+     text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+.card.por-encomenda {
+  position: relative; /* Garante que a faixa seja posicionada em relação a este card */
+}
+
+
+
+
+
+
+
+
+.pronta-entrega h1 {
+  text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pronta-entrega h2 {
+  text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+
+.categoria h1 {
+  text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.categoria h2 {
+  text-align: center;
+  color: var(--preto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+
+
+.sessao-video {
+  padding: 2rem 1rem; /* Espaço acima/abaixo e nas laterais */
+  background-color: #f5f5f5;
+}
+
+.container-video {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.video-wrapper-local {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #000;
+  margin: 1rem auto;
+  max-width: 100%;
+  width: 100%;
+}
+
+
+.video-wrapper-local video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+.animar-scroll {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.animar-scroll.visivel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-br7 {
+  background-color: #c7c5c53d;
+  color: #3d3b3b;
+  padding: 2rem 1rem 1rem;
+  
+}
+
+.footer-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.footer-bottom a {
+  text-decoration: none;
+  color: #007bff;
+}
+
+.footer-column {
+  flex: 1 1 220px;
+  min-width: 200px;
+}
+
+.footer-column h4 {
+  color: #000000;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+
+}
+
+.footer-column p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+}
+
+.footer-icons img {
+  height: 28px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.footer-icons-rs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Caso queira quebrar em telas pequenas */
+  gap: 10px; /* Espaço entre ícones */
+  margin-top: 18px;
+}
+
+.footer-icons-rs img {
+  height: 18px;
+  margin-top: 13px;
+}
+
+.footer-icons a:hover img,
+.footer-icons img:hover {
+  transform: scale(1.1);
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: #aaa;
+  
+  padding-top: 1rem;
+}
+
+.footer-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-column ul li {
+  margin-bottom: 0.4rem;
+}
+
+.footer-column ul li a {
+  color: #3d3b3b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+  color: #00aefe;
+}
+
+
+
+/*RESPONSIVIDADE*/
+
+/* Card geral */
+.card {
+  background-color: var(--branco);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  position: relative;
+}
+
+/* Grid igual para todas as sessões */
+.cards,
+.produtos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+/* Todas as sessões com mesmo limite de largura e padding */
+.pronta-entrega,
+.por-encomenda,
+.mais-vendidos,
+.categoria,
+.produtos {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
+}
+
+/* Responsividade básica */
+@media (max-width: 600px) {
+  .cards,
+  .produtos {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  header h1 {
+    font-size: 1rem;
+  }
+}
+

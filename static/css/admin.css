@@ -1,0 +1,205 @@
+/* Reset básico */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+}
+
+/* Cabeçalho */
+header {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+/* Painel principal */
+.admin-panel {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Formulário */
+form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+form input[type="text"],
+form select,
+form textarea,
+form input[type="file"] {
+  width: 100%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  margin-top: 0.3rem;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+form textarea {
+  resize: vertical;
+}
+
+form button[type="submit"] {
+  margin-top: 1.5rem;
+  padding: 0.75rem;
+  width: 100%;
+  background-color: #00aefe;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+form button[type="submit"]:hover {
+  background-color: #008fcb;
+}
+
+/* Checkbox grupo */
+form input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+form label input[type="checkbox"] {
+  margin-right: 0.3rem;
+}
+
+/* Tabela de produtos */
+#admin-lista-produtos {
+  margin-top: 2rem;
+}
+
+#admin-lista-produtos table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 0.95rem;
+}
+
+#admin-lista-produtos th,
+#admin-lista-produtos td {
+  padding: 0.75rem;
+  border: 1px solid #eee;
+  text-align: left;
+}
+
+#admin-lista-produtos th {
+  background-color: #00aefe;
+  color: white;
+}
+
+#admin-lista-produtos tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Botões de ação */
+#admin-lista-produtos a {
+  color: #007bff;
+  text-decoration: none;
+  margin-right: 0.5rem;
+}
+
+#admin-lista-produtos button {
+  color: red;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .admin-panel {
+    padding: 1rem;
+  }
+
+#admin-lista-produtos img {
+  width: 100%;
+  max-width: 120px;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+  #admin-lista-produtos table,
+  #admin-lista-produtos thead,
+  #admin-lista-produtos tbody,
+  #admin-lista-produtos th,
+  #admin-lista-produtos td,
+  #admin-lista-produtos tr {
+    display: block;
+  }
+
+  #admin-lista-produtos tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  #admin-lista-produtos tr {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    padding: 1rem;
+  }
+
+  #admin-lista-produtos td {
+    border: none;
+    padding: 0.25rem 0;
+  }
+
+  #admin-lista-produtos td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.2rem;
+    color: #555;
+  }
+
+  #admin-lista-produtos td:last-child {
+    margin-top: 0.5rem;
+    display: flex;
+    gap: 0.8rem;
+  }
+
+  #admin-lista-produtos td:last-child a,
+  #admin-lista-produtos td:last-child button {
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  #admin-lista-produtos td:last-child a {
+    background-color: #00aefe;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  #admin-lista-produtos td:last-child button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+  }
+}

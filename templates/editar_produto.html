@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Editar Produto</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+  <style>
+    form {
+      background: white;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0,0,0,0.1);
+    }
+
+    form h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 24px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      margin-top: 25px;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #00aefe;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #008ecc;
+    }
+
+    .imagem-preview {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .imagem-preview div {
+      text-align: center;
+    }
+
+    .imagem-preview img {
+      border-radius: 6px;
+      width: 120px;
+      height: auto;
+      object-fit: cover;
+      border: 1px solid #ccc;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .checkbox-label input {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+<body>
+  
+  <form method="POST" action="" enctype="multipart/form-data">
+    <a href="{{ url_for('admin') }}" class="btn-voltar">← Voltar para o Painel</a>
+    <h1>Editar Produto</h1>
+
+    <label for="tipo">Tipo de Produto</label>
+    <select id="tipo" name="tipo" onchange="updateFormFields()" required>
+      <option value="">Selecione</option>
+      <option value="chuteira" {% if produto.tipo == 'chuteira' %}selected{% endif %}>Chuteira</option>
+      <option value="tenis" {% if produto.tipo == 'tenis' %}selected{% endif %}>Tênis</option>
+      <option value="bolsa" {% if produto.tipo == 'bolsa' %}selected{% endif %}>Bolsa</option>
+    </select>
+
+    <label for="nome">Nome</label>
+    <input type="text" id="nome" name="nome" value="{{ produto.nome }}" required />
+
+    <!-- Campos dinâmicos visíveis conforme tipo -->
+    <div id="campos-chuteira-tenis" style="display: none;">
+      <label for="marca">Marca</label>
+      <input type="text" id="marca" name="marca" value="{{ produto.marca or '' }}">
+
+      <label for="tamanho">Tamanhos disponíveis (separados por vírgula)</label>
+      <input type="text" id="tamanho" name="tamanho" value="{{ produto.tamanho or '' }}">
+
+      <label for="cor">Cores disponíveis (separadas por vírgula)</label>
+      <input type="text" id="cor" name="cor" value="{{ produto.cor or '' }}">
+    </div>
+
+    <div id="campos-bolsa" style="display: none;">
+      <label for="cor">Cores disponíveis (separadas por vírgula)</label>
+      <input type="text" id="cor" name="cor" value="{{ produto.cor or '' }}">
+    </div>
+
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao" rows="3">{{ produto.descricao }}</textarea>
+
+    <label for="preco">Preço</label>
+    <input type="text" id="preco" name="preco" value="{{ produto.preco }}" required />
+
+    <div>
+      <h3>Imagens atuais</h3>
+      {% if imagens %}
+        <div class="imagem-preview">
+          {% for imagem in imagens %}
+            <div>
+              <img src="{{ url_for('static', filename='uploads/' + imagem.caminho) }}" alt="Imagem Produto" />
+              <div class="checkbox-label">
+                <input type="checkbox" name="excluir_imagens" value="{{ imagem.id }}">
+                <label>Excluir</label>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p>Sem imagens cadastradas.</p>
+      {% endif %}
+    </div>
+
+    <label for="novas_imagens">Adicionar novas imagens</label>
+    <input type="file" id="novas_imagens" name="novas_imagens" multiple accept="image/*" />
+
+    <div id="categoria-container" style="display:none;">
+      <label for="categoria">Categoria (para chuteiras)</label>
+      <input type="text" id="categoria" name="categoria" value="{{ produto.categoria or '' }}" maxlength="20" />
+    </div>
+
+    <div id="subcategoria-container" style="display: none;">
+  <label for="subcategoria">Subcategoria (somente para Campo)</label>
+  <select id="subcategoria" name="subcategoria">
+    <option value="">Nenhuma</option>
+    <option value="trava" {% if produto.subcategoria == 'trava' %}selected{% endif %}>Trava</option>
+    <option value="trava-mista" {% if produto.subcategoria == 'trava-mista' %}selected{% endif %}>Trava Mista</option>
+  </select>
+</div>
+
+
+    <div class="checkbox-label">
+      <input type="checkbox" id="pronta_entrega" name="pronta_entrega" {% if produto.pronta_entrega == 1 %}checked{% endif %} />
+      <label for="pronta_entrega">Pronta Entrega</label>
+    </div>
+
+    <div class="checkbox-label">
+      <input type="checkbox" id="mais_vendidos" name="mais_vendidos" {% if produto.mais_vendidos == 1 %}checked{% endif %} />
+      <label for="mais_vendidos">Mais Vendidos</label>
+    </div>
+
+    <div class="checkbox-label">
+  <input type="checkbox" id="por_encomenda" name="por_encomenda" {% if produto.por_encomenda == 1 %}checked{% endif %} />
+  <label for="por_encomenda">Por Encomenda</label>
+</div>
+
+
+    <button type="submit">Salvar Alterações</button>
+  </form>
+
+  <script>
+   function updateFormFields() {
+  const tipo = document.getElementById("tipo").value;
+  const chuteiraTenis = document.getElementById("campos-chuteira-tenis");
+  const bolsa = document.getElementById("campos-bolsa");
+  const categoria = document.getElementById("categoria-container");
+  const subcategoriaContainer = document.getElementById("subcategoria-container");
+  const categoriaInput = document.getElementById("categoria");  // ✅ ISSO AQUI FALTAVA!
+
+  chuteiraTenis.style.display = "none";
+  bolsa.style.display = "none";
+  categoria.style.display = "none";
+
+  if (tipo === "chuteira" || tipo === "tenis") {
+    chuteiraTenis.style.display = "block";
+  }
+
+  if (tipo === "bolsa") {
+    bolsa.style.display = "block";
+  }
+
+  if (tipo === "chuteira") {
+    categoria.style.display = "block";
+  } else {
+    categoriaInput.value = "";
+  }
+
+  if (tipo === "chuteira" && categoriaInput.value.toLowerCase() === "campo") {
+    subcategoriaContainer.style.display = "block";
+  } else {
+    subcategoriaContainer.style.display = "none";
+    document.getElementById("subcategoria").value = "";
+  }
+}
+
+
+    window.onload = function () {
+      document.getElementById("categoria").addEventListener("input", updateFormFields);
+      document.getElementById("tipo").addEventListener("change", updateFormFields);
+
+      updateFormFields();  // Atualiza ao carregar a página
+    };
+  </script>
+</body>
+</html>

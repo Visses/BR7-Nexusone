@@ -1,0 +1,213 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+  padding: 20px;
+  color: #333;
+}
+
+
+/* TELA DE CARREGAMENTO */
+#loader {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+.loader-content {
+  text-align: center;
+}
+
+.logo-br7 {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+.frase {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #00aefe;
+  font-weight: 500;
+}
+
+.progress-bar {
+  width: 200px;
+  height: 6px;
+  background-color: #444;
+  border-radius: 3px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.progress {
+  width: 0%;
+  height: 100%;
+  background-color: #00aefe;
+  animation: loadProgress 2.5s ease-out forwards;
+}
+
+@keyframes loadProgress {
+  to {
+    width: 100%;
+  }
+}
+
+/* Rodapé */
+.loader-footer {
+  position: absolute;
+  bottom: 40px;
+  text-align: center;
+}
+
+.loader-footer p {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #ccc;
+}
+
+.logo-nexus {
+  width: 160px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+}
+
+/* Esconde loader após o carregamento */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #000;
+}
+
+h2 {
+  margin-bottom: 10px;
+  color: #000;
+}
+
+/* Sessões */
+section {
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Resumo do pedido */
+.resumo-pedido div {
+  margin-bottom: 10px;
+}
+
+.resumo-pedido .total {
+  font-size: 18px;
+  margin-top: 10px;
+  color: #000;
+}
+
+/* Formulário */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+label {
+  font-weight: 500;
+}
+
+input, select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 100%;
+  transition: border-color 0.3s;
+}
+
+input:focus, select:focus {
+  border-color: #00aefe;
+  outline: none;
+}
+
+/* Botão */
+button {
+  background-color: #00aefe;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #008fcc;
+}
+
+/* Lista dos produtos */
+#lista-produtos div {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fafafa;
+}
+
+/* Responsividade */
+@media (min-width: 768px) {
+  body {
+    max-width: 900px;
+    margin: auto;
+  }
+
+  section {
+    padding: 20px;
+  }
+
+  form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  label {
+    width: 100%;
+  }
+
+  input, select {
+    flex: 1 1 45%;
+  }
+
+  input#complemento {
+    flex: 1 1 100%;
+  }
+
+  button {
+    flex: 1 1 100%;
+    margin-top: 10px;
+  }
+}

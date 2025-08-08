@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finalizar Pedido | BR7</title>
+  <link rel="stylesheet" href="/static/css/finalizar.css">
+</head>
+<script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("loader");
+    loader.classList.add("fade-out");
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 400);
+  });
+</script>
+
+<body>
+
+
+  <div id="loader">
+  <div class="loader-content">
+    <img src="{{ url_for('static', filename='images/BR7-logo.PNG') }}" alt="BR7 Logo" class="logo-br7">
+    <p class="frase">A melhor loja de produtos esportivos do Brasil.</p>
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+  </div>
+
+  <div class="loader-footer">
+    <p>Desenvolvido por <strong>NexusOne</strong></p>
+    <img src="{{ url_for('static', filename='images/nexus-logo.png') }}" alt="NexusOne Logo" class="logo-nexus">
+  </div>
+</div>
+
+  <h1>Finalizar Pedido</h1>
+
+  <section class="resumo-pedido">
+    <h2>Resumo do Pedido</h2>
+    <div id="lista-produtos"></div>
+    <div class="total"><strong>Total:</strong> <span id="total"></span></div>
+  </section>
+
+  <section class="formulario">
+    <h2>Seus Dados</h2>
+    <form id="form-finalizar">
+
+<label>Nome:</label>
+<input type="text" name="nome" id="nome" required>
+
+<label>CPF:</label>
+<input type="text" name="cpf" id="cpf" placeholder="000.000.000-00">
+
+
+<label>Celular (WhatsApp):</label>
+<input type="tel" name="celular" id="celular" required placeholder="(XX) XXXXX-XXXX">
+
+<label>CEP:</label>
+<input type="text" name="cep" id="cep" required>
+
+<label>Cidade:</label>
+<input type="text" name="cidade" id="cidade" required>
+
+<label>Estado:</label>
+<input type="text" name="estado" id="estado" required>
+
+<label>Bairro:</label>
+<input type="text" name="bairro" id="bairro" required>
+
+<label>Rua:</label>
+<input type="text" name="rua" id="rua" required>
+
+<label>Número:</label>
+<input type="text" name="numero" id="numero" required>
+
+<label>Complemento:</label>
+<input type="text" name="complemento" id="complemento" placeholder="Opcional">
+
+<label>Forma de Retirada:</label>
+<select name="retirada" id="retirada" required>
+  <option value="A combinar" selected>A combinar</option>
+  <option value="Retirada na loja">Retirada na loja</option>
+  <option value="Uber">Uber</option>
+  <option value="Correios">Correios</option>
+</select>
+
+<label>Forma de Pagamento:</label>
+<select name="pagamento" id="pagamento" required>
+  <option value="A combinar" selected>A combinar</option>
+  <option value="PIX">PIX</option>
+  <option value="Dinheiro">Dinheiro</option>
+  <option value="Cartão">Cartão</option>
+</select>
+
+
+      <button type="submit" id="btn-enviar-pedido">Enviar pedido via WhatsApp</button>
+
+    </form>
+  </section>
+
+<script src="/static/js/carrinho.js"></script>
+
+</body>
+</html>

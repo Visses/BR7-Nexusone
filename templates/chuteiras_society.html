@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  
+  <head>
+    <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BR7 - Chuteiras, Tênis e Bolsas</title>
+  
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="stylesheet" href="/static/css/modal-carrinho.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+</head>
+
+<div class="espaco-navbar"></div>
+<script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("loader");
+    loader.classList.add("fade-out");
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 400);
+  });
+</script>
+
+<body>
+
+  <!-- Banner de Cookies BR7 -->
+  <div id="cookie-banner" style="position: fixed; bottom: 20px; left: 20px; right: 20px; background: #000; color: #fff; padding: 1rem 1.5rem; border-radius: 10px; z-index: 9999; display: none; box-shadow: 0 0 10px rgba(0,0,0,0.5); font-family: Arial, sans-serif; max-width: 600px; margin: auto; text-align: center;">
+    <span style="font-size: 0.95rem;">
+    Este site utiliza cookies para melhorar sua experiência. Ao continuar, você concorda com nossa 
+    <a href="/politica-privacidade" style="color: #00aefe; text-decoration: underline;">Política de Privacidade</a>.
+  </span>
+  <div style="margin-top: 10px;">
+    <button onclick="aceitarCookies()" style="background: #00aefe; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 5px; font-weight: bold; cursor: pointer;">
+      Aceitar
+    </button>
+  </div>
+</div>
+
+
+<script>
+  function aceitarCookies() {
+    localStorage.setItem('cookies_aceitos', 'sim');
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+
+document.addEventListener('DOMContentLoaded', () => {
+  const aceitou = localStorage.getItem('cookies_aceitos');
+  if (!aceitou) {
+    document.getElementById('cookie-banner').style.display = 'block';
+  }
+});
+</script>
+
+
+
+
+<div id="loader">
+  <div class="loader-content">
+    <img src="{{ url_for('static', filename='images/BR7-logo.PNG') }}" alt="BR7 Logo" class="logo-br7">
+    <p class="frase">A melhor loja de produtos esportivos do Brasil.</p>
+    <div class="progress-bar">
+      <div class="progress"></div>
+    </div>
+  </div>
+
+  <div class="loader-footer">
+    <p>Desenvolvido por <strong>NexusOne</strong></p>
+    <img src="{{ url_for('static', filename='images/nexus-logo.png') }}" alt="NexusOne Logo" class="logo-nexus">
+  </div>
+</div>
+
+
+<header class="navbar">
+    <div class="menu-btn" onclick="abrirMenu()" id="botaoMenu">
+      <i class="fas fa-bars"></i>
+    </div>
+    <a href="/"><img src="/static/images/BR7-logo.PNG" class="logo"></a>
+    <div class="carrinho-icon" onclick="abrirCarrinho()">
+      <i class="fas fa-shopping-cart"></i>
+      <span id="badge-carrinho" class="badge-carrinho">0</span>
+    </div>
+  </header>
+
+    
+<!-- Menu lateral atualizado: para parar na MARCA (não gera mais modelos)
+     Insira este snippet no lugar do menu antigo. Usa as variáveis do context_processor:
+     - chuteiras_campo_trava (lista de marcas)
+     - chuteiras_campo_trava_mista
+     - chuteiras_society
+     - chuteiras_futsal
+-->
+<nav class="menu-lateral" id="menuLateral">
+  <div class="menu-item">
+    <button class="toggle-submenu">Chuteiras ▾</button>
+    <div class="submenu">
+      <!-- CAMPO -->
+      <div class="menu-item">
+        <button class="toggle-submenu">Campo ▾</button>
+        <div class="submenu">
+          <!-- TRAVA -->
+          <div class="menu-item">
+            <button class="toggle-submenu">Trava ▾</button>
+            <div class="submenu">
+              {% if chuteiras_campo_trava %}
+                {% for marca in chuteiras_campo_trava %}
+                  <div class="menu-item">
+                    <!-- Link direto para a rota que filtra por categoria/subcategoria/marca -->
+                    <a href="/loja/chuteiras/campo/trava/{{ marca | lower | replace(' ', '-') }}">{{ marca }}</a>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p>Nenhuma marca encontrada.</p>
+              {% endif %}
+            </div>
+          </div>
+
+          <!-- TRAVA MISTA -->
+          <div class="menu-item">
+            <button class="toggle-submenu">Trava Mista ▾</button>
+            <div class="submenu">
+              {% if chuteiras_campo_trava_mista %}
+                {% for marca in chuteiras_campo_trava_mista %}
+                  <div class="menu-item">
+                    <a href="/loja/chuteiras/campo/trava-mista/{{ marca | lower | replace(' ', '-') }}">{{ marca }}</a>
+                  </div>
+                {% endfor %}
+              {% else %}
+                <p>Nenhuma marca encontrada.</p>
+              {% endif %}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SOCIETY -->
+      <div class="menu-item">
+        <button class="toggle-submenu">Society ▾</button>
+        <div class="submenu">
+          {% if chuteiras_society %}
+            {% for marca in chuteiras_society %}
+              <div class="menu-item">
+                <a href="/loja/chuteiras/society/{{ marca | lower | replace(' ', '-') }}">{{ marca }}</a>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p>Nenhuma marca encontrada.</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- FUTSAL -->
+      <div class="menu-item">
+        <button class="toggle-submenu">Futsal ▾</button>
+        <div class="submenu">
+          {% if chuteiras_futsal %}
+            {% for marca in chuteiras_futsal %}
+              <div class="menu-item">
+                <a href="/loja/chuteiras/futsal/{{ marca | lower | replace(' ', '-') }}">{{ marca }}</a>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p>Nenhuma marca encontrada.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- OUTROS ITENS FIXOS -->
+  <a href="/loja/tenis">Tênis</a>
+  <a href="/loja/bolsas">Bolsas</a>
+  <a href="/loja/pronta-entrega" id="aba-pronta-entrega">Pronta Entrega</a>
+  <a href="/" class="menu-ativo">Todos</a>
+</nav>
+
+<!-- Observações:
+ - Este HTML assume que o context_processor agora fornece listas de strings (marcas). Ex: ['Adidas','Nike']
+ - Se quiser manter a aparência de botão expansível por marca (mesmo sem modelos), podemos trocar as <a> por botão + JS que redireciona ao clicar.
+ - Se houver marcas com caracteres especiais, o seu normalizar/rota deve corresponder (o backend normaliza com unidecode e '-' para espaços).
+ -->
+
+
+
+
+<!-- Carrossel de banners -->
+<section class="carrossel">
+  <div class="carrossel-inner">
+    <img src="/static/images/banner1.jpg" alt="Banner 1">
+    <img src="/static/images/banner2.jpg" alt="Banner 2">
+    <img src="/static/images/banner3.jpg" alt="Banner 3">
+  </div>
+</section>
+
+
+  <!-- Faixa preta com informações -->
+  <!-- Faixa preta com informações -->
+  <!-- Faixa preta com informações -->
+<div class="faixa-animada">
+  <marquee behavior="scroll" direction="left">
+    <img src="{{ url_for('static', filename='icons/usamap.png') }}" alt="Produtos importados">
+    Produtos importados dos EUA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+    <img src="{{ url_for('static', filename='icons/entrega.png') }}" alt="Frete expresso">
+    Frete expresso para todo o Brasil&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    <img src="{{ url_for('static', filename='icons/cartao.png') }}" alt="Parcelamento">
+    Parcela em até 12x no cartão&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    
+    <img src="{{ url_for('static', filename='icons/devolucao.png') }}" alt="Troca e devolução">
+   Entre em contato conosco em caso de insatisfação&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    <img src="{{ url_for('static', filename='icons/disconto.png') }}" alt="Desconto Pix">
+    5% OFF via Pix
+  </marquee>
+</div>
+
+<div class="menu-scroll-container" id="menuSemSubmenu">
+  <button class="menu-toggle" id="menuToggleSemSubmenu">
+    Navegar entre as sessões
+    <span class="seta">➤</span>
+  </button>
+  <div class="menu-scroll-flutuante" id="menuScrollFlutuanteSemSubmenu">
+    <button onclick="scrollParaElementoSemSubmenu('pronta')">Pronta Entrega</button>
+    <button onclick="scrollParaElementoSemSubmenu('encomenda')">Por Encomenda</button>
+    <button onclick="scrollParaElementoSemSubmenu('vendidos')">Mais Vendidos</button>
+  </div>
+</div>
+
+<script>
+
+
+if (document.getElementById('menuSemSubmenu')) {
+  const toggleBtn = document.getElementById('menuToggleSemSubmenu');
+  const menuFlutuante = document.getElementById('menuScrollFlutuanteSemSubmenu');
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (menuFlutuante.classList.contains('ativo')) {
+      menuFlutuante.classList.remove('ativo');
+      menuFlutuante.classList.add('fechar');
+      toggleBtn.classList.remove('ativo');
+      setTimeout(() => {
+        menuFlutuante.classList.remove('fechar');
+      }, 500);
+    } else {
+      menuFlutuante.classList.add('ativo');
+      toggleBtn.classList.add('ativo');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (
+      !e.target.closest('#menuSemSubmenu') &&
+      !e.target.closest('.menu-toggle')
+    ) {
+      menuFlutuante.classList.remove('ativo');
+      menuFlutuante.classList.add('fechar');
+      toggleBtn.classList.remove('ativo');
+      setTimeout(() => {
+        menuFlutuante.classList.remove('fechar');
+      }, 500);
+    }
+  });
+
+  window.scrollParaElementoSemSubmenu = function(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    menuFlutuante.classList.remove('ativo');
+    menuFlutuante.classList.add('fechar');
+    toggleBtn.classList.remove('ativo');
+    setTimeout(() => {
+      menuFlutuante.classList.remove('fechar');
+    }, 500);
+  };
+}
+
+</script>
+
+<h1 class="cat">SOCIETY</h1>
+
+<hr />
+
+<section class="pronta-entrega">
+  <h1 id="pronta">Pronta Entrega</h1>
+  <div class="cards">
+    {% for produto in pronta_entrega_chuteira_society %}
+      <div class="card produto-com-desconto" data-preco="{{ produto.preco }}">
+        <div class="faixa faixa-pronta-entrega">PRONTA ENTREGA</div>
+               {% set webp_image = produto.imagem.replace('.jpeg', '.webp').replace('.jpg', '.webp').replace('.png', '.webp') %}
+<picture>
+  <source srcset="{{ url_for('static', filename='uploads/' ~ webp_image) }}" type="image/webp">
+  <img src="{{ url_for('static', filename='uploads/' ~ produto.imagem) }}" alt="{{ produto.nome }}" loading="lazy">
+</picture>
+
+          <div class="card-title">{{ produto.nome }}</div>
+           <div class="preco-original" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px; color: #888;">
+            <span class="preco-original-valor"></span>
+            <span class="desconto-badge">
+              20% OFF
+            </span>
+          </div>
+          <div class="preco">R$ {{ produto.preco }}</div>
+          <div class="no-pix">NO PIX</div>
+          <div class="parcelas" data-preco="{{ produto.preco }}"></div>
+          <a class="btn" href="/produto/{{ produto.id }}">Ver detalhes</a>
+        </div>
+      </div>
+    {% else %}
+      <p>Nenhuma chuteira society pronta entrega encontrada.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+
+<hr />
+
+<section class="por-encomenda">
+  <h1 id="encomenda">Por Encomenda</h1>
+  <div class="cards">
+    {% for produto in por_encomenda_chuteira_society %}
+      <div class="card produto-com-desconto" data-preco="{{ produto.preco }}">
+        <div class="faixa faixa-por-encomenda">POR ENCOMENDA</div>
+               {% set webp_image = produto.imagem.replace('.jpeg', '.webp').replace('.jpg', '.webp').replace('.png', '.webp') %}
+<picture>
+  <source srcset="{{ url_for('static', filename='uploads/' ~ webp_image) }}" type="image/webp">
+  <img src="{{ url_for('static', filename='uploads/' ~ produto.imagem) }}" alt="{{ produto.nome }}" loading="lazy">
+</picture>
+
+        <div class="card-body">
+          <div class="card-title">{{ produto.nome }}</div>
+           <div class="preco-original" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px; color: #888;">
+            <span class="preco-original-valor"></span>
+            <span class="desconto-badge">
+              20% OFF
+            </span>
+          </div>
+          <div class="preco">R$ {{ produto.preco }}</div>
+          <div class="no-pix">NO PIX</div>
+          <div class="parcelas" data-preco="{{ produto.preco }}"></div>
+          <a class="btn" href="/produto/{{ produto.id }}">Ver detalhes</a>
+        </div>
+      </div>
+    {% else %}
+      <p>Nenhuma chuteira society por encomenda encontrada.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+
+<hr />
+
+<section class="mais-vendidos">
+  <h1 id="vendidos">Mais Vendidos</h1>
+  <div class="cards">
+    {% for produto in mais_vendidos_chuteira_society %}
+      <div class="card mais-vendido produto-com-desconto" data-preco="{{ produto.preco }}">
+        <div class="faixa-mais-vendido">MAIS VENDIDO</div>
+               {% set webp_image = produto.imagem.replace('.jpeg', '.webp').replace('.jpg', '.webp').replace('.png', '.webp') %}
+<picture>
+  <source srcset="{{ url_for('static', filename='uploads/' ~ webp_image) }}" type="image/webp">
+  <img src="{{ url_for('static', filename='uploads/' ~ produto.imagem) }}" alt="{{ produto.nome }}" loading="lazy">
+</picture>
+
+          <div class="card-title">{{ produto.nome }}</div>
+            <div class="preco-original" style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 4px; color: #888;">
+            <span class="preco-original-valor"></span>
+            <span class="desconto-badge">
+              20% OFF
+            </span>
+          </div>
+          <div class="preco">R$ {{ produto.preco }}</div>
+          <div class="no-pix">NO PIX</div>
+          <div class="parcelas" data-preco="{{ produto.preco }}"></div>
+          <a class="btn" href="/produto/{{ produto.id }}">Ver detalhes</a>
+        </div>
+      </div>
+    {% else %}
+      <p>Nenhuma chuteira society mais vendida encontrada.</p>
+    {% endfor %}
+  </div>
+</section>
+
+
+
+
+
+  <!-- Modal do Carrinho -->
+  <div id="modal-carrinho">
+    <div class="modal-conteudo">
+      <button class="close-modal" onclick="fecharCarrinho()">&times;</button>
+      <h3>Carrinho</h3>
+      <ul id="lista-carrinho"></ul>
+      <p id="total-carrinho"></p>
+      <a href="/finalizar-pedido" target="_blank" class="btn-whatsapp" style="text-decoration: none;">
+  Finalizar Pedido
+</a>
+
+    </div>
+  </div>
+
+  
+  <script src="/static/js/menu.js"></script>
+  <script src="/static/js/carrinho.js"></script>
+
+
+<script>
+  document.querySelectorAll('.produto-com-desconto').forEach(card => {
+    const precoStr = card.getAttribute('data-preco');
+    if(precoStr) {
+      let preco = parseFloat(precoStr.replace(',', '.'));
+      if(!isNaN(preco)) {
+        const precoOriginal = preco / 0.8;  // preço antes de 20% de desconto
+        const precoOriginalValorEl = card.querySelector('.preco-original-valor');
+        if(precoOriginalValorEl) {
+          precoOriginalValorEl.textContent = `R$ ${precoOriginal.toFixed(2).replace('.', ',')}`;
+        }
+      }
+    }
+  });
+</script>
+
+
+
+
+
+<script>
+let ultimaPosicaoScroll = window.scrollY;
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll", () => {
+  const posicaoAtual = window.scrollY;
+
+  if (posicaoAtual <= 10) {
+    // Estamos no topo — garantir que a navbar fique visível
+    navbar.classList.remove("esconder");
+    navbar.classList.add("mostrar");
+  } else if (posicaoAtual > ultimaPosicaoScroll) {
+    // Descendo — esconder
+    navbar.classList.remove("mostrar");
+    navbar.classList.add("esconder");
+  } else {
+    // Subindo — mostrar
+    navbar.classList.remove("esconder");
+    navbar.classList.add("mostrar");
+  }
+
+  ultimaPosicaoScroll = posicaoAtual;
+});
+
+</script>
+
+<!-- Botão flutuante WhatsApp -->
+<a href="https://wa.me/5511947629000" target="_blank" 
+   style="
+      position: fixed;
+      width: 60px;
+      height: 60px;
+      bottom: 20px;
+      right: 20px;
+      background-color: #25D366;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      font-size: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      z-index: 1000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+    "
+   aria-label="WhatsApp">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="32px" height="32px">
+    <path d="M20.52 3.48A11.79 11.79 0 0012 0C5.37 0 0 5.37 0 12c0 2.12.56 4.16 1.62 5.96L0 24l6.27-1.6A11.94 11.94 0 0012 24c6.63 0 12-5.37 12-12 0-3.22-1.26-6.25-3.48-8.52zM12 22c-1.85 0-3.63-.51-5.15-1.47l-.37-.23-3.72.95.98-3.64-.25-.38A9.926 9.926 0 012 12c0-5.52 4.48-10 10-10 2.67 0 5.18 1.04 7.07 2.93A9.934 9.934 0 0122 12c0 5.52-4.48 10-10 10zm5.57-7.92c-.3-.15-1.77-.87-2.05-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.48-.9-.8-1.5-1.8-1.68-2.1-.17-.3-.02-.46.13-.61.13-.12.3-.3.45-.45.15-.15.2-.25.3-.42.1-.17.05-.32-.02-.45-.07-.13-.67-1.6-.92-2.2-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37s-1.05 1.03-1.05 2.5 1.08 2.9 1.23 3.1c.15.2 2.12 3.24 5.14 4.54.72.31 1.28.5 1.72.64.72.23 1.38.2 1.9.12.58-.1 1.77-.72 2.02-1.42.25-.7.25-1.3.18-1.42-.07-.12-.27-.2-.57-.35z"/>
+  </svg>
+</a>
+</body>
+
+
+<div id="footer-trigger" style="height: 1px;"></div>
+
+<footer class="footer-br7">
+  <div class="footer-wrapper">
+    <!-- CATEGORIAS -->
+    <div class="footer-column animar-scroll">
+  <h4>Categorias</h4>
+  <ul>
+    <li class="footer-submenu">
+      <a  class="submenu-toggle-footer">Chuteiras ▾</a>
+      <ul class="submenu-footer">
+        <li><a href="/loja/chuteiras/campo/trava">Trava</a></li>
+        <li><a href="/loja/chuteiras/campo/trava-mista">Trava Mista</a></li>
+        <li><a href="/loja/chuteiras/society">Society</a></li>
+        <li><a href="/loja/chuteiras/futsal">Futsal</a></li>
+      </ul>
+    </li>
+    <li><a href="/loja/tenis">Tênis</a></li>
+    <li><a href="/loja/bolsas">Bolsas</a></li>
+    <li><a href="/loja/pronta-entrega">Pronta Entrega</a></li>
+    <li><a href="/">Todos</a></li>
+  </ul>
+</div>
+
+<script>
+// Toggle submenu no footer
+document.querySelectorAll('.submenu-toggle-footer').forEach(toggle => {
+  toggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    const submenu = toggle.nextElementSibling;
+    const isOpen = submenu.style.display === 'block';
+    // Fecha todos antes de abrir
+    document.querySelectorAll('.submenu-footer').forEach(sm => sm.style.display = 'none');
+    submenu.style.display = isOpen ? 'none' : 'block';
+  });
+});
+
+// Fecha o submenu ao clicar fora
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.footer-submenu')) {
+    document.querySelectorAll('.submenu-footer').forEach(sm => sm.style.display = 'none');
+  }
+});
+</script>
+
+    <!-- LINKS ÚTEIS -->
+    <div class="footer-column animar-scroll">
+      <h4>Links Úteis</h4>
+      <ul>
+        <li><a href="/quem-somos">Quem Somos</a></li>
+        <li><a href="/duvidas-frequentes">Dúvidas Frequentes</a></li>
+        <li><a href="/depoimentos">Depoimentos</a></li>
+      </ul>
+    </div>
+
+    <!-- LEGAL -->
+    <div class="footer-column animar-scroll">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="/politica-envio">Política de Envio</a></li>
+        <li><a href="/politica-privacidade">Política de Privacidade</a></li>
+        <li><a href="/politica-servico">Política de Serviço</a></li>
+        <li><a href="/termos-servico">Termos de Serviço</a></li>
+      </ul>
+    </div>
+
+    <!-- ATENDIMENTO -->
+ <!-- ATENDIMENTO -->
+    <div class="footer-column animar-scroll">
+      <h4>Atendimento</h4>
+      <p><strong>Whatsapp:</strong><br>(11) 94762-9000</p>
+      <div class="footer-icons-rs">
+        <a target="_blank" href="https://www.instagram.com/br7chuteiras?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="><img src="/static/icons/instagram.png" alt="Instagram"></a>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGAMENTO -->
+  <div class="footer-icons payment-icons animar-scroll" style="text-align: center; margin-top: 1.5rem; display: flex; justify-content: center; flex-wrap: wrap;">
+    <img src="/static/icons/visa_payment_method_card_icon_142729.svg" alt="Visa">
+    <img src="/static/icons/mastercard_old_payment_method_card_icon_142735.svg" alt="Mastercard">
+    <img src="/static/icons/elo_payment_method_card_icon_142740.svg" alt="Elo">
+    <img src="/static/icons/pix_icon_198027.svg" alt="Pix">
+  </div>
+
+  <!-- COPYRIGHT -->
+  <div class="footer-bottom animar-scroll">
+    <p>© 2025 BR7 Chuteiras. Todos os direitos reservados.</p>
+    <p>Desenvolvido por <strong><a href="https://nexusonebr.com" target="_blank" rel="noopener noreferrer">NexusOne</a></strong> - Desenvolvedores de Software e Websites</p>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('.parcelas').forEach(el => {
+  const precoStr = el.dataset.preco;
+  if (precoStr) {
+    let preco = parseFloat(precoStr.replace(',', '.'));
+    if (!isNaN(preco)) {
+      // Acrescenta os R$10,00 ao valor
+      let precoComAcrecimo = preco + 10;
+
+      // Aplica juros de 3,49% ao mês por 12x (juros compostos)
+      let taxaJuros = 0.0349;
+      let parcelas = 12;
+      let parcela = precoComAcrecimo * ((taxaJuros * Math.pow(1 + taxaJuros, parcelas)) / (Math.pow(1 + taxaJuros, parcelas) - 1));
+
+      // Formata e exibe
+      el.textContent = `12x de R$ ${parcela.toFixed(2).replace('.', ',')}`;
+    }
+  }
+});
+</script>
+<script>
+  const elementos = document.querySelectorAll('.animar-scroll');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visivel');
+      } else {
+        entry.target.classList.remove('visivel'); // Reverso quando sai da tela
+      }
+    });
+  }, {
+    threshold: 0.2
+  });
+
+  elementos.forEach(el => observer.observe(el));
+</script>
+
+
+
+</html>
+

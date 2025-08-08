@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main # ou a branch que você usa para produção
+      - main # branch de produção
 
 jobs:
   deploy:
@@ -21,7 +21,6 @@ jobs:
       - name: Sync files to server
         run: |
           rsync -avz --delete ./ root@srv948114.hstgr.cloud:/var/www/br7site/
-        # Substitua YOUR_SERVER_IP pelo IP ou hostname do seu servidor
 
       - name: Restart Gunicorn
-        run: ssh root@YOUR_SERVER_IP 'sudo systemctl restart gunicorn'
+        run: ssh root@srv948114.hstgr.cloud 'sudo systemctl restart gunicorn'

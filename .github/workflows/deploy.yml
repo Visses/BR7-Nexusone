@@ -1,0 +1,27 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main # ou a branch que você usa para produção
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Sync files to server
+        run: |
+          rsync -avz --delete ./ root@srv948114.hstgr.cloud:/var/www/br7site/
+        # Substitua YOUR_SERVER_IP pelo IP ou hostname do seu servidor
+
+      - name: Restart Gunicorn
+        run: ssh root@YOUR_SERVER_IP 'sudo systemctl restart gunicorn'

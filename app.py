@@ -43,19 +43,21 @@ def buscar_produtos(filtros=None):
             query += f" AND {campo} = %s"
             params.append(valor)
 
-    with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-        cursor.execute(query, tuple(params))
-        produtos = cursor.fetchall()
+    with get_db() as conn:  # Abre conexão aqui
+        with conn.cursor() as cursor:  # Usa cursor padrão que já tem DictCursor pelo get_db()
+            cursor.execute(query, tuple(params))
+            produtos = cursor.fetchall()
 
-        for produto in produtos:
-            cursor.execute(
-                "SELECT caminho FROM imagens_produto WHERE produto_id = %s LIMIT 1",
-                (produto['id'],)
-            )
-            imagem = cursor.fetchone()
-            produto['imagem'] = imagem['caminho'] if imagem else None
+            for produto in produtos:
+                cursor.execute(
+                    "SELECT caminho FROM imagens_produto WHERE produto_id = %s LIMIT 1",
+                    (produto['id'],)
+                )
+                imagem = cursor.fetchone()
+                produto['imagem'] = imagem['caminho'] if imagem else None
 
     return produtos
+
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import pymysql
@@ -92,16 +94,19 @@ def logout():
 def index():
     # Produtos em geral (caso ainda precise no template)
     with get_db() as conn:
-        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+        with conn.cursor() as cursor:  # get_db já usa DictCursor, pode omitir o pymysql.cursors.DictCursor aqui
             cursor.execute("SELECT * FROM produtos")
             produtos = cursor.fetchall()
 
             for produto in produtos:
-                cursor.execute("SELECT caminho FROM imagens_produto WHERE produto_id = %s LIMIT 1", (produto['id'],))
+                cursor.execute(
+                    "SELECT caminho FROM imagens_produto WHERE produto_id = %s LIMIT 1", 
+                    (produto['id'],)
+                )
                 imagem = cursor.fetchone()
                 produto['imagem'] = imagem['caminho'] if imagem else None
 
-    # Chamadas já limitadas no SQL
+    # As funções abaixo devem abrir e fechar conexão internamente
     mais_vendidos_chuteira = get_produtos_por_filtro(tipo='chuteira', mais_vendidos=1, limit=15)
     mais_vendidos_tenis = get_produtos_por_filtro(tipo='tenis', mais_vendidos=1, limit=15)
 
@@ -116,18 +121,17 @@ def index():
 
     campo_trava = get_produtos_por_filtro(tipo='chuteira', categoria='campo', subcategoria='trava', limit=15)
     campo_trava_mista = get_produtos_por_filtro(tipo='chuteira', categoria='campo', subcategoria='trava-mista', limit=15)
-    produtos = buscar_produtos()
-    return render_template('index.html',
-        produtos=produtos,
 
+    produtos_gerais = buscar_produtos()
+
+    return render_template('index.html',
+        produtos=produtos_gerais,
         mais_vendidos_chuteira=mais_vendidos_chuteira,
         mais_vendidos_tenis=mais_vendidos_tenis,
-
         pronta_entrega_chuteira=pronta_entrega_chuteira,
         pronta_entrega_tenis=pronta_entrega_tenis,
         por_encomenda_chuteira=por_encomenda_chuteira,
         por_encomenda_tenis=por_encomenda_tenis,
-
         society_chuteira=society_chuteira,
         futsal_chuteira=futsal_chuteira,
         campo_trava=campo_trava,
@@ -336,8 +340,6 @@ def excluir_produto(id):
 
     return redirect('/admin')
 
-
-# rota produto/<id> (GET)
 @app.route('/produto/<int:id>')
 def produto(id):
     with get_db() as conn:
@@ -356,8 +358,9 @@ def produto(id):
     produto['categoria'] = produto.get('categoria') or None
     produto['pronta_entrega'] = int(produto.get('pronta_entrega', 0)) == 1
     produto['mais_vendidos'] = int(produto.get('mais_vendidos', 0)) == 1
+    produto['por_encomenda'] = int(produto.get('por_encomenda', 0)) == 1  # Certifique-se de adicionar isso
 
-            # Define a disponibilidade como texto
+    # Define a disponibilidade como texto
     if produto.get('pronta_entrega'):
         produto['disponibilidade'] = 'Pronta Entrega'
     elif produto.get('por_encomenda'):
@@ -368,7 +371,6 @@ def produto(id):
     imagens = [img['caminho'] for img in imagens_bd]
 
     return render_template('produto.html', produto=produto, imagens=imagens)
-
 
 
 # editar-produto (GET e POST)
@@ -480,17 +482,18 @@ def loja():
                 query += f" AND {campo} = %s"
                 params.append(valor)
 
-        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
-            cursor.execute(query, tuple(params))
-            produtos = cursor.fetchall()
+        with get_db() as conn:
+            with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+                cursor.execute(query, tuple(params))
+                produtos = cursor.fetchall()
 
-            for produto in produtos:
-                cursor.execute(
-                    "SELECT caminho FROM imagens_produto WHERE produto_id = %s LIMIT 1",
-                    (produto['id'],)
-                )
-                imagem = cursor.fetchone()
-                produto['imagem'] = imagem['caminho'] if imagem else None
+                for produto in produtos:
+                    cursor.execute(
+                        "SELECT caminho FROM imagens_produto WHERE produto_id = %s LIMIT 1",
+                        (produto['id'],)
+                    )
+                    imagem = cursor.fetchone()
+                    produto['imagem'] = imagem['caminho'] if imagem else None
 
         return produtos
 
@@ -524,8 +527,6 @@ def loja():
         'por_encomenda_tenis': buscar_produtos({'tipo': 'tenis', 'por_encomenda': 1}),
         'por_encomenda_bolsa': buscar_produtos({'tipo': 'bolsa', 'por_encomenda': 1}),
 
-
-
         # Categorias específicas
         'society_chuteira': buscar_produtos({'tipo': 'chuteira', 'categoria': 'society'}),
         'campo_chuteira': buscar_produtos({'tipo': 'chuteira', 'categoria': 'campo'}),
@@ -533,8 +534,9 @@ def loja():
         'campo_trava_mista': buscar_produtos({'tipo': 'chuteira', 'categoria': 'campo', 'subcategoria': 'trava-mista'}),
         'futsal_chuteira': buscar_produtos({'tipo': 'chuteira', 'categoria': 'futsal'}),
     }
-    produtos = buscar_produtos()
-    return render_template('index.html', **context, produtos=produtos)
+
+    return render_template('index.html', **context)
+
 
 @app.route('/loja/chuteiras/campo/trava')
 def chuteiras_trava():

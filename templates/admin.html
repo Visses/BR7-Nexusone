@@ -24,7 +24,7 @@
         </select>
 
         <label for="nome">Nome</label>
-        <input type="text" id="nome" name="nome" required autocomplete="on"/>
+        <input type="text" id="nome" name="nome" required />
 
         <div id="campos-extra"></div>
 
@@ -32,7 +32,7 @@
         <textarea id="descricao" name="descricao" rows="3" placeholder="Descrição do produto"></textarea>
 
         <label for="preco">Preço</label>
-        <input type="text" id="preco" name="preco" required autocomplete="on" />
+        <input type="text" id="preco" name="preco" required />
 
         <label for="imagens">Imagens do Produto</label>
         <input type="file" id="imagens" name="imagens" multiple accept="image/*" required />
@@ -71,7 +71,7 @@
 
   <label>
     <input type="checkbox" id="mais_vendidos" name="mais_vendidos" />
-    Destaques
+    Mais Vendidos
   </label>
 
   <label>
@@ -195,18 +195,12 @@ function updateFormFields() {
 if (tipo === "chuteira" || tipo === "tenis") {
   campos.innerHTML += `
     <label for="marca">Marca</label>
-    <input type="text" id="marca" name="marca" required autocomplete="on">
+    <input type="text" id="marca" name="marca" required>
 
     <label>Tamanhos Disponíveis:</label><br/>
-
-<label>
-  <input type="checkbox" id="selecionarTodos"> Selecionar todos
-</label><br/>
-
-${[33,34,35,36,37,38,39,40,41,42,43,44].map(t => `
-  <label><input type="checkbox" class="tamanho" name="tamanho" value="${t}"> ${t}</label>
-`).join(' ')}
-
+    ${[33,34,35,36,37,38,39,40,41,42,43,44].map(t => `
+      <label><input type="checkbox" name="tamanho" value="${t}"> ${t}</label>
+    `).join(' ')}
 
     <br/><label>Cores Disponíveis:</label><br/>
     ${['Preto', 'Branco', 'Azul', 'Vermelho', 'Rosa', 'Verde', 'Original'].map(cor => `
@@ -230,13 +224,6 @@ ${[33,34,35,36,37,38,39,40,41,42,43,44].map(t => `
   
   verificarSubcategoria();
 }
-
-
-// Pega o checkbox "selecionar todos"
-document.getElementById("selecionarTodos").addEventListener("change", function() {
-  const checkboxes = document.querySelectorAll(".tamanho");
-  checkboxes.forEach(cb => cb.checked = this.checked);
-});
 
 function verificarSubcategoria() {
   const tipo = document.getElementById('tipo').value;
